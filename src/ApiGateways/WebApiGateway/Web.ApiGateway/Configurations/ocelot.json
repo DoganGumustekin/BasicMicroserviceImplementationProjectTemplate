@@ -1,0 +1,34 @@
+{
+  "Routes": [
+    {
+      "UseServiceDiscovery": true,
+      "ServiceName": "CatalogService",
+      "DownstreamPathTemplate": "/api/catalog/{everything}",
+      "DownstreamScheme": "http",
+
+      "UpstreamPathTemplate": "/catalog/{everything}", //apigateway dan gelecek bir template, path. böyle bişey gelirse downstreama gönder.
+      "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ],
+      "UpstreamScheme": "http"
+    },
+    {
+      "UseServiceDiscovery": true,                     //host ve ort bilgisini consul üzerinden al. aşağıda ayarlarını yaptık satır26
+      "ServiceName": "IdentityService",                //serviceRegistery e üye olan bir servis ismini de göndermeli.
+      "DownstreamPathTemplate": "/api/auth/",
+      "DownstreamScheme": "http",
+      
+      "UpstreamPathTemplate": "/auth/",
+      "UpstreamHttpMethod": [ "Post" ],
+      "UpstreamScheme": "http"
+    }
+  ],
+
+  //serviceDiscovery
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:5000",
+    "ServiceDiscoveryProvider": {        //consul ayarları
+      "Host": "localhost",
+      "Port": 8500,
+      "Type": "Consul"
+    }
+  }
+}
